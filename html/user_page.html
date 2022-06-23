@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everybody's Chat</title>
+    <link href="css/style.css" media="screen" rel="stylesheet">
+</head>
+<body>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!--Подключаем Jquery!-->
+    <script async type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        //Загружаем библиотеку JQuery
+        window.jQuery || document.write('<script src="js/jquery"><\/script>');
+        
+        //Функция загрузки профиля
+        function load_profile()
+        {
+            $.ajax({
+                    type: "POST",
+                    url:  "load_profile.php",
+                    data: "req=ok",
+                    // Выводим то что вернул PHP
+                    success: function(html)
+                    {
+                        //Выводим то что вернул PHP
+                        $("#profile-data").append(html);
+                    }
+            });
+        }
+        
+        //Функция загрузки пользователей
+        function load_users()
+        {
+            $.ajax({
+                    type: "POST",
+                    url:  "load_users.php",
+                    data: "req=ok",
+                    // Выводим то что вернул PHP
+                    success: function(html)
+                    {
+                        //Выводим то что вернул PHP
+                        $("#users-list").append(html);
+                    }
+            });
+        }
+    </script>
+
+    <div class="content" id="login-page">
+        <div class="form">
+            <h1 id="block-title">WELCOME TO E-CHAT</h1>
+            <div id="profile-data"></div>
+            <div class="block-input">
+                <form action="html/chat_page.html">
+                    <button type="submit" class="button">Go Chat</button>
+                </form>
+                <form action="exit.php">
+                    <button type="submit" class="button">Logout</button>
+                </form>
+            </div>
+            <h1 id="block-title">REGISTERED USERS</h1>
+            <!-- <form action="login.php" method="POST"></form> -->
+            <div class="block-input">   
+                <div id="users-list"></div>
+            </div>
+            <!-- </form> -->
+            
+        </div>
+        
+        
+    </div>
+    <script>
+        //При загрузке страницы подгружаем сообщения
+        load_profile();
+        load_users();
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everybody's Chat</title>
+    <link href="../css/style.css" media="screen" rel="stylesheet">
+</head>
+<body>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!--Подключаем Jquery!-->
+    <script async type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        //Загружаем библиотеку JQuery
+        window.jQuery || document.write('<script src="js/jquery"><\/script>');
+        
+        //Функция отправки сообщения
+        function send_messages() {
+            //Считываем сообщение из поля ввода с id mess_to_add
+            var message = $("#message_to_send").val();
+            // Отсылаем параметры
+           $.ajax({
+                    type: "POST",
+                    url:  "../send_messages.php",
+                    // data: "message =" + message,
+                    data: "message=" + message,
+                    // Выводим то что вернул PHP
+                    success: function(html)
+                    {
+                        //Если все успешно, загружаем сообщения
+                        load_messages();
+                        //Очищаем форму ввода сообщения
+                        $("#message_to_send").val('');
+                    }
+            });
+        }
+        
+        //Функция загрузки сообщений
+        function load_messages() {
+            $.ajax({
+                    type: "POST",
+                    url:  "../load_messages.php",
+                    data: "req=ok",
+                    // Выводим то что вернул PHP
+                    success: function(html)
+                    {
+                        //Очищаем форму ввода
+                        $("#messages").empty();
+                        //Выводим то что вернул PHP
+                        $("#messages").append(html);
+                        //Прокручиваем блок вниз(если сообщений много)
+                        $("#messages").scrollTop(90000);
+                    }
+            });
+        }
+    </script>
+
+    <div class="content" id="login-page">
+        <div class="content-chat">
+            <h1 id="block-title">E-CHAT</h1>
+
+            <div class="block-chat">
+                <div class='block-chat-message'>
+                    <div id="messages"></div>
+                </div>
+            </div>
+
+            <form action="javascript:send_messages();">
+                <input type="text" class="sendinput" id="message_to_send">
+                <input type="submit" class="button" value="Send">
+            </form>
+            <form action="../index.php">
+                <input type="submit" class="button" value="Main"/>
+            </form>
+            
+        </div>
+        
+        
+    </div>
+    <script>
+        //При загрузке страницы подгружаем сообщения
+        load_messages();
+        //Ставим цикл на каждые три секунды
+        setInterval(load_messages,3000);
+    </script>
+</body>
+</html>
